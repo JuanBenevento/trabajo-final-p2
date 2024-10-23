@@ -1,5 +1,7 @@
 package tp_Final.Modelos;
 
+import java.util.Date;
+
 public class Venta {
     private Integer id_venta;
     private Comprador comprador;
