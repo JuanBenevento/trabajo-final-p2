@@ -67,4 +67,16 @@ public class Venta {
     public void setMonto(Double monto) {
         this.monto = monto;
     }
+
+    @Override
+    public String toString() {
+        return "Venta{" +
+                "id_venta=" + id_venta +
+                ", comprador=" + comprador +
+                ", vendedor=" + vendedor +
+                ", fecha_venta=" + fecha_venta +
+                ", vehiculo=" + vehiculo +
+                ", monto=" + monto +
+                '}';
+    }
 }
