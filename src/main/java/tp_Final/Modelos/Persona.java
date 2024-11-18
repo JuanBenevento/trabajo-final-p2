@@ -1,26 +1,31 @@
 package tp_Final.Modelos;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+
+
 public abstract class Persona {
-    private Integer idPersona;
     private String nombre;
     private String apellido;
     private Integer dni;
     private String email;
 
-    public Persona(Integer idPersona, String nombre, String apellido, Integer dni, String email) {
-        this.idPersona = idPersona;
+    public Persona() {
+    }
+
+    public Persona( String nombre, String apellido, Integer dni, String email) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.email = email;
     }
 
-    public Integer getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Integer idPersona) {
-        this.idPersona = idPersona;
+    public Persona(Persona persona) {
+        this.nombre = persona.getNombre();
+        this.apellido = persona.getApellido();
+        this.dni = persona.getDni();
+        this.email = persona.getEmail();
     }
 
     public String getNombre() {
@@ -55,7 +60,13 @@ public abstract class Persona {
         this.email = email;
     }
 
-    public abstract String ObtenerTipo();
-
-
+    @Override
+    public String toString() {
+        return "Persona{" +
+                "nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", dni=" + dni +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

@@ -140,15 +140,15 @@ public class Gestor implements iGestionable {
                 .orElse(null);
     }
 
-    public Vehiculo obtenerVehiculoPorId(String id){
-        List<Vehiculo> vehiculos = leerVehiculos("vehiculos.json");  // Método que obtiene la lista de compradores
-        return vehiculos.stream()
-                .filter(c -> c.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-    }
+   public Vehiculo obtenerVehiculoPorId(String id){
+       List<Vehiculo> vehiculos = leerVehiculos("vehiculos.json");  // Método que obtiene la lista de compradores
+       return vehiculos.stream()
+               .filter(c -> c.getId().equals(id))
+               .findFirst()
+               .orElse(null);
+   }
 
-    public void mostrarAutosSegunPresupuesto(Double presupuesto){
+   public void mostrarAutosSegunPresupuesto(Double presupuesto){
         List<Vehiculo> listaVehiculos = leerVehiculos("vehiculos.json");
         for(Vehiculo vehiculo : listaVehiculos){
             if(vehiculo.getPrecio() <=presupuesto){
@@ -156,7 +156,7 @@ public class Gestor implements iGestionable {
             }
         }
 
-    }
+   }
 
 }
 

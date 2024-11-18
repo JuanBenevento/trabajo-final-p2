@@ -1,33 +1,39 @@
 package tp_Final.Modelos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Venta {
-    private Integer id_venta;
+    private Integer id;
     private Comprador comprador;
     private Vendedor vendedor;
-    private Date fecha_venta;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date fecha;
+
     private Vehiculo vehiculo;
     private Double monto;
 
-    public Venta(Integer id_venta, Comprador comprador, Vendedor vendedor, Date fecha_venta, Vehiculo vehiculo, Double monto) {
-        this.id_venta = id_venta;
+    // Constructor vacío necesario para Jackson
+    public Venta() {
+    }
+
+    public Venta(Integer idVenta, Comprador comprador, Vendedor vendedor, Date fechaVenta, Vehiculo vehiculo, Double monto) {
+        this.id = idVenta;
         this.comprador = comprador;
         this.vendedor = vendedor;
-        this.fecha_venta = fecha_venta;
+        this.fecha = fechaVenta;
         this.vehiculo = vehiculo;
         this.monto = monto;
     }
 
-    public Venta() {
+    public Integer getId() {
+        return id;
     }
 
-    public Integer getId_venta() {
-        return id_venta;
-    }
-
-    public void setId_venta(Integer id_venta) {
-        this.id_venta = id_venta;
+    public void setId(Integer idVenta) {
+        this.id = idVenta;
     }
 
     public Comprador getComprador() {
@@ -46,12 +52,12 @@ public class Venta {
         this.vendedor = vendedor;
     }
 
-    public Date getFecha_venta() {
-        return fecha_venta;
+    public Date getFechaVenta() {
+        return fecha;
     }
 
-    public void setFecha_venta(Date fecha_venta) {
-        this.fecha_venta = fecha_venta;
+    public void setFechaVenta(Date fechaVenta) {
+        this.fecha = fechaVenta;
     }
 
     public Vehiculo getVehiculo() {
@@ -73,10 +79,10 @@ public class Venta {
     @Override
     public String toString() {
         return "Venta{" +
-                "id_venta=" + id_venta +
+                "idVenta=" + id +
                 ", comprador=" + comprador +
                 ", vendedor=" + vendedor +
-                ", fecha_venta=" + fecha_venta +
+                ", fechaVenta=" + fecha +
                 ", vehiculo=" + vehiculo +
                 ", monto=" + monto +
                 '}';
