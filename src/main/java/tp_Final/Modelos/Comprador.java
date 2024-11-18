@@ -1,15 +1,29 @@
 package tp_Final.Modelos;
 
 public class Comprador extends Persona {
+    private String tipoPersona;
     private Double montoDisponible;
 
-    public Comprador(Integer idPersona, String nombre, String apellido, Integer dni, String email, Double montoDisponible) {
-        super(idPersona, nombre, apellido, dni, email);
+
+    public Comprador() {
+    }
+
+    public Comprador(Persona persona, Double montoDisponible) {
+        super(persona);
         this.montoDisponible = montoDisponible;
+        this.tipoPersona = "Comprador";
     }
 
     public Double getMontoDisponible() {
         return montoDisponible;
+    }
+
+    public String getTipoPersona() {
+        return tipoPersona;
+    }
+
+    public void setTipoPersona(String tipoPersona) {
+        this.tipoPersona = tipoPersona;
     }
 
     public void setMontoDisponible(Double montoDisponible) {
@@ -17,7 +31,11 @@ public class Comprador extends Persona {
     }
 
     @Override
-    public String ObtenerTipo() {
-        return "";
+    public String toString() {
+        return "Comprador{" +
+                super.toString()+
+                "tipoPersona='" + tipoPersona + '\'' +
+                ", montoDisponible=" + montoDisponible +
+                '}';
     }
 }

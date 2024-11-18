@@ -1,25 +1,34 @@
 package tp_Final.Modelos;
 
-public class Vendedor extends Persona{
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-    private String ventasRealizadas;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.TreeSet;
+@JsonIgnoreProperties({"tipoPersona"})
+public class Vendedor extends Persona {
+    private String tipoPersona;
     private Double salarioBase;
-    private Double comisionPorVentas;
+    private Double comision;
 
-    public Vendedor(Integer idPersona, String nombre, String apellido, Integer dni, String email, String ventasRealizadas, Double salarioBase, Double comisionPorVentas) {
-        super(idPersona, nombre, apellido, dni, email);
-        this.ventasRealizadas = ventasRealizadas;
+
+    public Vendedor() {
+    }
+
+    public Vendedor(Persona persona, Double comisionPorVentas) {
+        super(persona);
         this.salarioBase = salarioBase;
-        this.comisionPorVentas = comisionPorVentas;
+        this.comision = comisionPorVentas;
+        this.tipoPersona = "Vendedores";
     }
 
-    public String getVentasRealizadas() {
-        return ventasRealizadas;
-    }
 
-    public void setVentasRealizadas(String ventasRealizadas) {
-        this.ventasRealizadas = ventasRealizadas;
+    public void setComision(Double comision) {
+        this.comision = comision;
     }
 
     public Double getSalarioBase() {
@@ -31,15 +40,20 @@ public class Vendedor extends Persona{
     }
 
     public Double getComisionPorVentas() {
-        return comisionPorVentas;
+        return comision;
     }
 
     public void setComisionPorVentas(Double comisionPorVentas) {
-        this.comisionPorVentas = comisionPorVentas;
+        this.comision = comisionPorVentas;
     }
 
     @Override
-    public String ObtenerTipo() {
-        return "";
+    public String toString() {
+        return "Vendedor{" +
+                super.toString() +
+                "tipoPersona='" + tipoPersona + '\'' +
+                ", salarioBase=" + salarioBase +
+                ", comision=" + comision +
+                '}';
     }
 }
