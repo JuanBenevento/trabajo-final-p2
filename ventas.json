@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "comprador": {
+      "nombre": "Juan",
+      "apellido": "Pérez",
+      "dni": 12345678,
+      "email": "juan.perez@example.com",
+      "montoDisponible": 50000.0
+    },
+    "vendedor": {
+      "nombre": "Ana",
+      "apellido": "Fernández",
+      "dni": 56789123,
+      "email": "ana.fernandez@example.com",
+      "salarioBase": 30000.0,
+      "comision": 500.0
+    },
+    "fecha": "2024-11-17T10:00:00Z",
+    "vehiculo": {
+      "id": 1,
+      "modelo": "Ford Fiesta",
+      "marca": "Ford",
+      "precio": 15000.0,
+      "stock": 10
+    },
+    "monto": 15000.0
+  },
+  {
+    "id": 2,
+    "comprador": {
+      "nombre": "María",
+      "apellido": "Gómez",
+      "dni": 87654321,
+      "email": "maria.gomez@example.com",
+      "montoDisponible": 75000.0
+    },
+    "vendedor": {
+      "nombre": "Pedro",
+      "apellido": "Martínez",
+      "dni": 34567890,
+      "email": "pedro.martinez@example.com",
+      "salarioBase": 35000.0,
+      "comision": 800.0
+    },
+    "fecha": "2024-11-17T12:00:00Z",
+    "vehiculo": {
+      "id": 2,
+      "modelo": "Toyota Corolla",
+      "marca": "Toyota",
+      "precio": 20000.0,
+      "stock": 5
+    },
+    "monto": 20000.0
+  }
+]
