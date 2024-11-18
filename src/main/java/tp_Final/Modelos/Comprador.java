@@ -38,4 +38,5 @@ public class Comprador extends Persona {
                 ", montoDisponible=" + montoDisponible +
                 '}';
     }
+
 }

@@ -1,9 +1,8 @@
 package tp_Final.Modelos;
 
+
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,5 +54,9 @@ public class Vendedor extends Persona {
                 ", salarioBase=" + salarioBase +
                 ", comision=" + comision +
                 '}';
+    }
+
+    public Double calcularPagoConComision(Double precioVenta, Integer comision){
+        return (precioVenta * (comision / 100)) + salarioBase;
     }
 }

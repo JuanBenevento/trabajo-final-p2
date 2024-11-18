@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public abstract class Persona {
     private String nombre;
     private String apellido;
-    private Integer dni;
+    private String dni;
     private String email;
 
     public Persona() {
     }
 
-    public Persona( String nombre, String apellido, Integer dni, String email) {
+    public Persona( String nombre, String apellido, String dni, String email) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -44,11 +44,11 @@ public abstract class Persona {
         this.apellido = apellido;
     }
 
-    public Integer getDni() {
+    public String getDni() {
         return dni;
     }
 
-    public void setDni(Integer dni) {
+    public void setDni(String dni) {
         this.dni = dni;
     }
 

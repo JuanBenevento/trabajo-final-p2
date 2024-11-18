@@ -87,4 +87,8 @@ public class Venta {
                 ", monto=" + monto +
                 '}';
     }
+
+    public Double calcularDescuento(Double precioVenta, Integer descuento){
+        return (precioVenta + (precioVenta * (descuento / 100)));
+    }
 }
