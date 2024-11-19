@@ -1,7 +1,8 @@
 package tp_Final.Modelos;
 
+import tp_Final.Exepciones.*;
 import tp_Final.Modelos.*;
-import tp_Final.Servicios.Gestor;
+import tp_Final.Servicios.*;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -12,10 +13,10 @@ import java.util.*;
 public class Menu {
     private Gestor gestor = new Gestor();
     private Scanner scanner = new Scanner(System.in);
-    List<Comprador> compradores = new ArrayList<>();
-    List<Vendedor> vendedores = new ArrayList<>();
-    List<Vehiculo> vehiculos = new ArrayList<>();
-    List<Venta> ventas = new ArrayList<>();
+    private List<Comprador> compradores = new ArrayList<>();
+    private List<Vendedor> vendedores = new ArrayList<>();
+    private List<Vehiculo> vehiculos = new ArrayList<>();
+    private List<Venta> ventas = new ArrayList<>();
 
     public Menu() {
         this.compradores = gestor.leerCompradores("compradores.json");
@@ -24,7 +25,7 @@ public class Menu {
         this.ventas = gestor.leerVentas("ventas.json");
     }
 
-    public void mostrarMenu() throws IOException, ParseException, InterruptedException {
+    public void mostrarMenu() throws IOException, ParseException, InterruptedException, ElementoNoEncontradoExcepcion {
         int opcion;
 
         do {
@@ -35,7 +36,7 @@ public class Menu {
             System.out.println("4. Salir");
             System.out.print("Selecciona una opción: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1 -> menuCompradores();
@@ -44,12 +45,12 @@ public class Menu {
                 case 4 -> System.out.println("Saliendo del sistema...");
                 default -> System.out.println("Opción no válida, intenta de nuevo.");
             }
-        } while (opcion != 4); // Repite el menú hasta que el usuario elija "Salir"
+        } while (opcion != 4);
     }
 
 
 
-    public void menuCompradores() throws InterruptedException {
+    public void menuCompradores() throws InterruptedException, ElementoNoEncontradoExcepcion, IOException {
         System.out.println("\033[H\033[2J");
         System.out.flush();
         int opcion = 0;
@@ -58,16 +59,17 @@ public class Menu {
             System.out.println("1. Agregar Comprador");
             System.out.println("2. Listar Compradores");
             System.out.println("3. Editar Compradores");
-            System.out.println("4. Volver");
+            System.out.println("4. Eliminar Comprador");
+            System.out.println("5. Volver");
             System.out.print("Elija una opción: ");
 
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer de entrada
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
                     agregarComprador();
-                    break; // Salir del switch después de ejecutar la acción
+                    break;
                 case 2:
                     listarCompradores();
                     break;
@@ -75,29 +77,38 @@ public class Menu {
                     editarCompradorPorDni();
                     break;
                 case 4:
+                    eliminarCompradorPorDni();
+                    break;
+                case 5:
                     System.out.println("Volviendo al menú principal...");
-                    break; // Salir del switch, y luego del bucle en el do-while
+                    break;
                 default:
                     System.out.println("Opción no válida. Por favor, intente nuevamente.");
             }
-        } while (opcion != 4); // Repite el menú hasta que el usuario elija la opción 4
+        } while (opcion != 5);
     }
 
     private int buscarPersonaPorDni() {
         int contador =0;
-        System.out.println("Ingrese el DNI del comprador a editar: ");
-        String dni = scanner.nextLine();
-        if(dni.length() != 8){
-            System.out.println("El dni debe tener 8 números válidos");
-        }else if(!dni.matches("1234567890")){
-            System.out.println("El dni debe tener 8 números válidos");
-        }
-
-        for (Comprador comprador : compradores){
-            contador ++;
-            if(comprador.getDni() == dni){
-                return contador -1;
+        String dni = null;
+        while(dni == null) {
+            System.out.println("Ingrese el DNI del comprador a editar: ");
+            dni = scanner.nextLine();
+            if (dni.length() > 8 || dni.length() < 8) {
+                System.out.println("El dni debe tener 8 números válidos");
+                dni = null;
+            } else if (!dni.matches("1234567890")) {
+                System.out.println("El dni debe tener 8 números válidos");
+                dni = null;
             }
+            for (Comprador comprador : compradores){
+                contador ++;
+                if(comprador.getDni() == dni){
+                    return contador -1;
+                }
+            }
+
+
         }
 
         return contador-1;
@@ -107,35 +118,37 @@ public class Menu {
         int posicion = buscarPersonaPorDni();
         int opcion = 0;
 
+        if (posicion > 0) {
+            System.out.println("1. Nombre");
+            System.out.println("2. Apellido");
+            System.out.println("3. Email");
+            System.out.println("4. Monto Disponible");
+            System.out.println("5. Volver");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
 
-        System.out.println("1. Nombre");
-        System.out.println("2. Apellido");
-        System.out.println("3. Email");
-        System.out.println("4. Monto Disponible");
-        System.out.println("5. Volver");
-        opcion = scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
+            switch (opcion){
+                case 1:
+                    String nombre = scanner.nextLine();
+                    compradores.get(posicion).setNombre(nombre);
+                case 2:
+                    String apellido = scanner.nextLine();
+                    compradores.get(posicion).setApellido(apellido);
+                case 3:
+                    String email = scanner.nextLine();
+                    compradores.get(posicion).setEmail(email);
+                case 4:
+                    double montoDisponible = scanner.nextDouble();
+                    compradores.get(posicion).setMontoDisponible(montoDisponible);
+                case 5: break;
+            }
 
-        switch (opcion){
-            case 1:
-                String nombre = scanner.nextLine();
-                compradores.get(posicion).setNombre(nombre);
-            case 2:
-                String apellido = scanner.nextLine();
-                compradores.get(posicion).setApellido(apellido);
-            case 3:
-                String email = scanner.nextLine();
-                compradores.get(posicion).setEmail(email);
-            case 4:
-                double montoDisponible = scanner.nextDouble();
-                compradores.get(posicion).setMontoDisponible(montoDisponible);
-            case 5: break;
+            gestor.guardarComprador(compradores);
         }
 
-        gestor.guardarComprador(compradores);
 
     }
-    public void menuVehiculos() throws IOException, InterruptedException {
+    public void menuVehiculos() throws IOException, InterruptedException, ElementoNoEncontradoExcepcion {
         System.out.println("\033[H\033[2J");
         System.out.flush();
         int opcion = 0;
@@ -144,41 +157,44 @@ public class Menu {
             System.out.println("1. Agregar Vehículo");
             System.out.println("2. Listar Vehículos");
             System.out.println("3. Editar Vehículos");
-            System.out.println("4. Mostrar Vehículos según presupuesto");
-            System.out.println("5. Volver");
+            System.out.println("4. Eliminar Vehiculo");
+            System.out.println("5. Mostrar Vehículos según presupuesto");
+            System.out.println("6. Volver");
             System.out.print("Seleccione una opción: ");
 
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
                     agregarVehiculo();
-                    break; // Salir del switch
+                    break;
                 case 2:
                     listarVehiculos();
-                    break; // Salir del switch
+                    break;
                 case 3:
                     editarVehiculoPorId();
-                    break; // Salir del switch
+                    break;
                 case 4:
-                    listaSegunPresupuesto();
-                    break; // Salir del switch
+                    eliminarVehiculoPorId();
+                    break;
                 case 5:
+                    listaSegunPresupuesto();
+                case 6:
                     System.out.println("Volviendo al menú principal...");
-                    break; // Salir del switch y del bucle en el `do-while`
+                    break;
                 default:
                     System.out.println("Opción no válida. Por favor, intente nuevamente.");
             }
-        } while (opcion != 5); // Repite el menú hasta que el usuario elija "Volver"
+        } while (opcion != 6);
     }
 
 
     public void editarVehiculoPorId() throws IOException {
         int posicion = buscarVehiculoPorId();
-        if (posicion == -1) { // Validar si el vehículo existe
+        if (posicion == -1) {
             System.out.println("Vehículo no encontrado.");
-            return; // Salir si no se encuentra el vehículo
+            return;
         }
 
         int opcion;
@@ -192,7 +208,7 @@ public class Menu {
             System.out.print("Seleccione una opción: ");
 
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1 -> {
@@ -224,7 +240,7 @@ public class Menu {
             }
         } while (opcion != 5);
 
-        // Guardar los cambios realizados
+
         gestor.guardarVehiculo(vehiculos);
         System.out.println("Cambios guardados exitosamente.");
     }
@@ -234,7 +250,7 @@ public class Menu {
         int contador = 0;
         System.out.println("Ingrese el ID del vehiculo: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
+        scanner.nextLine();
 
         for (Vehiculo vehiculo : vehiculos){
             contador ++;
@@ -245,7 +261,7 @@ public class Menu {
         return 0;
     }
 
-    public void menuVentas() throws IOException, ParseException, InterruptedException {
+    public void menuVentas() throws IOException, ParseException, InterruptedException, ElementoNoEncontradoExcepcion {
         System.out.println("\033[H\033[2J");
         System.out.flush();
         int opcion = 0;
@@ -255,41 +271,49 @@ public class Menu {
             System.out.println("1. Listar Vendedores");
             System.out.println("2. Editar Vendedores");
             System.out.println("3. Agregar Vendedor");
-            System.out.println("4. Agregar Venta");
-            System.out.println("5. Listar Ventas");
-            System.out.println("6. Editar Ventas");
-            System.out.println("7. Volver");
+            System.out.println("4. Eliminar Vendedor");
+            System.out.println("5. Agregar Venta");
+            System.out.println("6. Listar Ventas");
+            System.out.println("7. Editar Ventas");
+            System.out.println("8. Eliminar Venta");
+            System.out.println("9. Volver");
             System.out.print("Seleccione una opción: ");
 
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
                     listarVendedores();
-                    break; // Salir del switch
+                    break;
                 case 2:
                     editarVendedorPorDni();
-                    break; // Salir del switch
+                    break;
                 case 3:
                     agregarVendedor();
-                    break; // Salir del switch
+                    break;
                 case 4:
-                    agregarVenta();
-                    break; // Salir del switch
+                    eliminarVendedorPorDni();
+                    break;
                 case 5:
-                    listarVentas();
-                    break; // Salir del switch
+                    agregarVenta();
+                    break;
                 case 6:
-                    editarVentaPorId();
-                    break; // Salir del switch
+                    listarVentas();
+                    break;
                 case 7:
+                    editarVentaPorId();
+                    break;
+                case 8:
+                    eliminarVentaPorId();
+                    break;
+                case 9:
                     System.out.println("Volviendo al menú principal...");
-                    break; // Salir del switch y luego del bucle
+                    break;
                 default:
                     System.out.println("Opción no válida. Por favor, intente nuevamente.");
             }
-        } while (opcion != 7); // Repite el menú hasta que el usuario elija "Volver"
+        } while (opcion != 9);
     }
 
 
@@ -297,7 +321,7 @@ public class Menu {
         int contador =0;
         System.out.println("Ingrese el id de la venta: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
+        scanner.nextLine();
 
         for(Venta venta : ventas){
             contador ++;
@@ -312,7 +336,7 @@ public class Menu {
         int posicion = buscarVentaPorId();
         if (posicion == -1) {
             System.out.println("Venta no encontrada.");
-            return; // Salir si no se encuentra la venta
+            return;
         }
 
         int opcion;
@@ -326,14 +350,16 @@ public class Menu {
             System.out.println("6. Volver");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1 -> {
                     System.out.print("Ingrese el DNI del nuevo comprador: ");
                     String dniComprador = scanner.nextLine();
-                    ventas.get(posicion).setComprador(gestor.obtenerCompradorPorDni(dniComprador));
-                    System.out.println("Comprador actualizado correctamente.");
+                    if(dniComprador.length() == 8){
+                        ventas.get(posicion).setComprador(gestor.obtenerCompradorPorDni(dniComprador));
+                        System.out.println("Comprador actualizado correctamente.");
+                    }
                 }
                 case 2 -> {
                     System.out.print("Ingrese el DNI del nuevo vendedor: ");
@@ -356,7 +382,7 @@ public class Menu {
                 }
                 case 4 -> {
                     System.out.print("Ingrese el ID del nuevo vehículo: ");
-                    String idVehiculo = scanner.nextLine();
+                    Integer idVehiculo = scanner.nextInt();
                     ventas.get(posicion).setVehiculo(gestor.obtenerVehiculoPorId(idVehiculo));
                     System.out.println("Vehículo actualizado correctamente.");
                 }
@@ -371,26 +397,30 @@ public class Menu {
             }
         } while (opcion != 6);
 
-        // Guardar los cambios realizados en las ventas
+
         gestor.guardarVenta(ventas);
         System.out.println("Cambios guardados exitosamente.");
     }
 
     public int buscarVendedorPorDni(){
         int contador =0;
-        System.out.println("Ingrese el DNI del vendedor a editar: ");
-        String dni = scanner.nextLine();
-        if(dni.length() != 8){
-            System.out.println("El dni debe tener 8 números válidos");
-        }else if(!dni.matches("1234567890")){
-            System.out.println("El dni debe tener 8 números válidos");
-        }else{
-            for (Vendedor vendedor : vendedores){
-                contador ++;
-                if(vendedor.getDni() == dni){
-                    return contador -1;
+        String dni = null;
+        while(dni == null) {
+            System.out.println("Ingrese el DNI del vendedor a editar: ");
+             dni = scanner.nextLine();
+            if (dni.length() > 8 || dni.length() < 8) {
+                System.out.println("El dni debe tener 8 números válidos");
+            }
+            if (!(dni.matches("^\\d{8}$"))) {
+                System.out.println("El dni debe tener 8 números válidos");
+            }
+            for (Vendedor vendedor : vendedores) {
+                contador++;
+                if (vendedor.getDni() == dni) {
+                    return contador - 1;
                 }
             }
+
 
         }
         return 0;
@@ -399,7 +429,7 @@ public class Menu {
     public void editarVendedorPorDni() throws IOException {
         int posicion = buscarVendedorPorDni();
 
-        if (posicion == -1) { // Validar si el vendedor existe
+        if (posicion == -1) {
             System.out.println("Vendedor no encontrado.");
             return;
         }
@@ -416,45 +446,44 @@ public class Menu {
             System.out.print("Seleccione una opción: ");
 
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
-                case 1 -> {
+                case 1:
                     System.out.print("Ingrese el nuevo nombre: ");
                     String nuevoNombre = scanner.nextLine();
                     vendedores.get(posicion).setNombre(nuevoNombre);
                     System.out.println("Nombre actualizado correctamente.");
-                }
-                case 2 -> {
+                    break;
+                case 2:
                     System.out.print("Ingrese el nuevo apellido: ");
                     String nuevoApellido = scanner.nextLine();
                     vendedores.get(posicion).setApellido(nuevoApellido);
                     System.out.println("Apellido actualizado correctamente.");
-                }
-                case 3 -> {
+                    break;
+                case 3:
                     System.out.print("Ingrese el nuevo email: ");
                     String nuevoEmail = scanner.nextLine();
                     vendedores.get(posicion).setEmail(nuevoEmail);
                     System.out.println("Email actualizado correctamente.");
-                }
-                case 4 -> {
+                    break;
+                case 4:
                     System.out.print("Ingrese el nuevo salario base: ");
                     double nuevoSalario = scanner.nextDouble();
                     vendedores.get(posicion).setSalarioBase(nuevoSalario);
                     System.out.println("Salario base actualizado correctamente.");
-                }
-                case 5 -> {
+                    break;
+                case 5:
                     System.out.print("Ingrese la nueva comisión: ");
                     double nuevaComision = scanner.nextDouble();
                     vendedores.get(posicion).setComision(nuevaComision);
                     System.out.println("Comisión actualizada correctamente.");
-                }
-                case 6 -> System.out.println("Volviendo al menú anterior...");
-                default -> System.out.println("Opción no válida. Por favor, intente nuevamente.");
+                    break;
+                case 6:  System.out.println("Volviendo al menú anterior...");
+                default: System.out.println("Opción no válida. Por favor, intente nuevamente.");
             }
         } while (opcion != 6);
 
-        // Guardar los cambios realizados
         gestor.guardarVendedor(vendedores);
         System.out.println("Cambios guardados exitosamente.");
     }
@@ -503,6 +532,9 @@ public class Menu {
         comprador.setApellido(apellido);
         System.out.print("DNI: ");
         String dni = scanner.nextLine();
+        if(dni.length() < 8 || dni.length() > 8){
+            System.out.println("DNI invalido.");
+        }
         comprador.setDni(dni);
         scanner.nextLine();
         System.out.print("Email: ");
@@ -581,28 +613,29 @@ public class Menu {
         System.out.print("Ingrese el DNI del Comprador: ");
         String dniComprador = scanner.nextLine();
 
-        // Buscar si el comprador con ese DNI ya existe
-        comprador = gestor.obtenerCompradorPorDni(dniComprador);  // Método para buscar comprador por DNI
+        comprador = gestor.obtenerCompradorPorDni(dniComprador);
 
-        // Si el comprador no existe, pedir los datos para crear uno nuevo
+
         if (comprador == null) {
             System.out.println("Comprador no encontrado. Ingrese los datos del comprador:");
-            agregarComprador();// Obtener el último comprador agregado
+            agregarComprador();
         }
+        venta.setComprador(gestor.obtenerCompradorPorDni(dniComprador));
+
         System.out.println("Datos del Vendedor:");
         System.out.print("Ingrese el DNI del Vendedor: ");
-        vendedor = gestor.obtenerVendedorPorDni(scanner.nextLine());  // Método para buscar comprador por DNI
+        vendedor = gestor.obtenerVendedorPorDni(scanner.nextLine());
         if(vendedor == null){
             System.out.println("Vendedor no encontrado. Ingrese los datos del vendedor:");
             agregarVendedor();
             vendedor = vendedores.getLast();
         }
-
+        venta.setVendedor(vendedor);
         // Solicitar los datos del vehículo
         System.out.println("Datos del Vehículo:");
         System.out.print("Ingrese el id del Vehiculo: ");
-        String idVehiculo = scanner.nextLine();
-        vehiculo = gestor.obtenerVehiculoPorId(idVehiculo);  // Método para buscar comprador por DNI
+        Integer idVehiculo = scanner.nextInt();
+        vehiculo = gestor.obtenerVehiculoPorId(idVehiculo);
         if(vehiculo == null){
             System.out.println("Vehiculo no encontrado. Ingrese los datos:");
             agregarVehiculo();
@@ -610,20 +643,19 @@ public class Menu {
         }else{
             vehiculo.setStock((vehiculo.getStock() - 1));
         }
+        venta.setVehiculo(vehiculo);
 
-        // Solicitar el monto de la venta
         System.out.print("Monto: ");
         double monto = scanner.nextDouble();
         venta.setMonto(monto);
-        scanner.nextLine();  // Limpiar buffer
+        scanner.nextLine();
 
 
-        // Crear la venta y agregarla
+
         venta.setFechaVenta(new Date());
         venta.setId((ventas.size() + 1));
         this.ventas.add(venta);
-        gestor.guardarVenta(ventas);  // Guardar la venta
-
+        gestor.guardarVenta(ventas);
         System.out.println("Venta registrada correctamente.");
     }
 
@@ -633,5 +665,63 @@ public class Menu {
         gestor.mostrarAutosSegunPresupuesto(presupuesto);
         Thread.sleep(5000);
     }
+
+    public void eliminarCompradorPorDni() throws ElementoNoEncontradoExcepcion, IOException {
+        System.out.print("Ingrese el DNI del comprador a eliminar: ");
+        String dni = scanner.nextLine();
+
+        Comprador comprador = compradores.stream()
+                .filter(c -> c.getDni().equals(dni))
+                .findFirst()
+                .orElseThrow(() -> new ElementoNoEncontradoExcepcion("No se encontró un comprador con el DNI: " + dni));
+
+        compradores.remove(comprador);
+        gestor.guardarComprador(compradores);
+        System.out.println("Comprador eliminado correctamente.");
+    }
+
+    public void eliminarVendedorPorDni() throws ElementoNoEncontradoExcepcion, IOException {
+        System.out.print("Ingrese el DNI del vendedor a eliminar: ");
+        String dni = scanner.nextLine();
+
+        Vendedor vendedor = vendedores.stream()
+                .filter(v -> v.getDni().equals(dni))
+                .findFirst()
+                .orElseThrow(() -> new ElementoNoEncontradoExcepcion("No se encontró un vendedor con el DNI: " + dni));
+
+        vendedores.remove(vendedor);
+        gestor.guardarVendedor(vendedores);
+        System.out.println("Vendedor eliminado correctamente.");
+    }
+
+    public void eliminarVehiculoPorId() throws ElementoNoEncontradoExcepcion, IOException {
+        System.out.print("Ingrese el ID del vehículo a eliminar: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        Vehiculo vehiculo = vehiculos.stream()
+                .filter(v -> v.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ElementoNoEncontradoExcepcion("No se encontró un vehículo con el ID: " + id));
+
+        vehiculos.remove(vehiculo);
+        gestor.guardarVehiculo(vehiculos);
+        System.out.println("Vehículo eliminado correctamente.");
+    }
+
+    public void eliminarVentaPorId() throws ElementoNoEncontradoExcepcion, IOException {
+        System.out.print("Ingrese el ID de la venta a eliminar: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        Venta venta = ventas.stream()
+                .filter(v -> v.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ElementoNoEncontradoExcepcion("No se encontró una venta con el ID: " + id));
+
+        ventas.remove(venta);
+        gestor.guardarVenta(ventas);
+        System.out.println("Venta eliminada correctamente.");
+    }
+
 
 }

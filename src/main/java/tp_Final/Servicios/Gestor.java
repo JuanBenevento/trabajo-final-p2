@@ -144,7 +144,7 @@ public class Gestor implements iGestionable {
         return null;
     }
 
-   public Vehiculo obtenerVehiculoPorId(String id){
+   public Vehiculo obtenerVehiculoPorId(Integer id){
        List<Vehiculo> vehiculos = leerVehiculos("vehiculos.json");  // Método que obtiene la lista de compradores
        for(Vehiculo vehiculo : vehiculos){
            if(vehiculo.getId().equals(id)){

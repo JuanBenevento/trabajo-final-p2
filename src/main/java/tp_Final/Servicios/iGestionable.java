@@ -1,9 +1,5 @@
 package tp_Final.Servicios;
-
-import tp_Final.Modelos.Comprador;
-import tp_Final.Modelos.Vehiculo;
-import tp_Final.Modelos.Vendedor;
-import tp_Final.Modelos.Venta;
+import tp_Final.Modelos.*;
 
 import java.io.IOException;
 import java.util.List;

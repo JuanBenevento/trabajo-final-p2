@@ -15,7 +15,7 @@ public class Venta {
     private Vehiculo vehiculo;
     private Double monto;
 
-    // Constructor vacío necesario para Jackson
+
     public Venta() {
     }
 
