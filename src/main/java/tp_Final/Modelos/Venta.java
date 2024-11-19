@@ -3,6 +3,7 @@ package tp_Final.Modelos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Venta {
     private Integer id;
@@ -86,6 +87,18 @@ public class Venta {
                 ", vehiculo=" + vehiculo +
                 ", monto=" + monto +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Venta venta)) return false;
+        return Objects.equals(id, venta.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     public Double calcularDescuento(Double precioVenta, Integer descuento){

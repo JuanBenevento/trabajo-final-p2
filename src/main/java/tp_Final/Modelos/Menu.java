@@ -250,7 +250,7 @@ public class Menu {
         int contador = 0;
         System.out.println("Ingrese el ID del vehiculo: ");
         int id = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // Limpiar buffer
 
         for (Vehiculo vehiculo : vehiculos){
             contador ++;
@@ -321,7 +321,7 @@ public class Menu {
         int contador =0;
         System.out.println("Ingrese el id de la venta: ");
         int id = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // Limpiar buffer
 
         for(Venta venta : ventas){
             contador ++;
@@ -336,7 +336,7 @@ public class Menu {
         int posicion = buscarVentaPorId();
         if (posicion == -1) {
             System.out.println("Venta no encontrada.");
-            return;
+            return; // Salir si no se encuentra la venta
         }
 
         int opcion;
@@ -354,15 +354,20 @@ public class Menu {
 
             switch (opcion) {
                 case 1 -> {
-                    System.out.print("Ingrese el DNI del nuevo comprador: ");
+                    System.out.print("Ingrese el DNI del comprador: ");
                     String dniComprador = scanner.nextLine();
-                    if(dniComprador.length() == 8){
-                        ventas.get(posicion).setComprador(gestor.obtenerCompradorPorDni(dniComprador));
+                    Comprador comprador = gestor.obtenerCompradorPorDni(dniComprador);
+                    if(comprador != null){
+                        ventas.get(posicion).setComprador(comprador);
                         System.out.println("Comprador actualizado correctamente.");
+                    }else{
+                        System.out.println("No se encontró el comprador");
+                        break;
                     }
+
                 }
                 case 2 -> {
-                    System.out.print("Ingrese el DNI del nuevo vendedor: ");
+                    System.out.print("Ingrese el DNI del vendedor: ");
                     String dniVendedor = scanner.nextLine();
                     ventas.get(posicion).setVendedor(gestor.obtenerVendedorPorDni(dniVendedor));
                     System.out.println("Vendedor actualizado correctamente.");
