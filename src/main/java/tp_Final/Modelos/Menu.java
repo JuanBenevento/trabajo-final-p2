@@ -250,7 +250,7 @@ public class Menu {
         int contador = 0;
         System.out.println("Ingrese el ID del vehiculo: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
+        scanner.nextLine();
 
         for (Vehiculo vehiculo : vehiculos){
             contador ++;
@@ -321,7 +321,7 @@ public class Menu {
         int contador =0;
         System.out.println("Ingrese el id de la venta: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
+        scanner.nextLine();
 
         for(Venta venta : ventas){
             contador ++;
@@ -336,7 +336,7 @@ public class Menu {
         int posicion = buscarVentaPorId();
         if (posicion == -1) {
             System.out.println("Venta no encontrada.");
-            return; // Salir si no se encuentra la venta
+            return;
         }
 
         int opcion;
@@ -636,7 +636,6 @@ public class Menu {
             vendedor = vendedores.getLast();
         }
         venta.setVendedor(vendedor);
-        // Solicitar los datos del vehículo
         System.out.println("Datos del Vehículo:");
         System.out.print("Ingrese el id del Vehiculo: ");
         Integer idVehiculo = scanner.nextInt();
@@ -704,7 +703,7 @@ public class Menu {
         int id = scanner.nextInt();
         scanner.nextLine();
         Vehiculo vehiculo = vehiculos.stream()
-                .filter(v -> v.getId() == id)
+                .filter(v -> v.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ElementoNoEncontradoExcepcion("No se encontró un vehículo con el ID: " + id));
 
@@ -719,7 +718,7 @@ public class Menu {
         scanner.nextLine();
 
         Venta venta = ventas.stream()
-                .filter(v -> v.getId() == id)
+                .filter(v -> v.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ElementoNoEncontradoExcepcion("No se encontró una venta con el ID: " + id));
 

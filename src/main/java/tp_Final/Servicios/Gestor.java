@@ -153,67 +153,6 @@ public class Gestor implements iGestionable {
        return null;
    }
 
-   public void eliminarVehiculo(int id){
-       List<Vehiculo> vehiculos = leerVehiculos("vehiculos.json");
-       int contador = 0;
-       for(Vehiculo vehiculo : vehiculos){
-           contador ++;
-           if(vehiculo.getId().equals(id)){
-               contador--;
-               break;
-
-           }
-       }
-       if(contador>0){
-           vehiculos.remove(contador);
-       }
-   }
-    public void eliminarVendedor(String dni){
-        List<Vendedor> vendedores = leerVendedores("vendedores.json");
-        int contador = 0;
-        for(Vendedor vendedor : vendedores){
-            contador ++;
-            if(vendedor.getDni().equals(dni)){
-                contador--;
-                break;
-
-            }
-        }
-        if(contador>0){
-            vendedores.remove(contador);
-        }
-    }
-    public void eliminarComprador(String dni){
-        List<Comprador> compradores = leerCompradores("compradores.json");
-        int contador = 0;
-        for(Comprador comprador : compradores){
-            contador ++;
-            if(comprador.getDni().equals(dni)){
-                contador--;
-                break;
-
-            }
-        }
-        if(contador>0){
-            compradores.remove(contador);
-        }
-    }
-    public void eliminarVenta(Integer id){
-        List<Venta> ventas = leerVentas("ventas.json");
-        int contador = 0;
-        for(Venta venta : ventas){
-            contador ++;
-            if(venta.getId().equals(id)){
-                contador--;
-                break;
-
-            }
-        }
-        if(contador>0){
-            ventas.remove(contador);
-        }
-    }
-
    public void mostrarAutosSegunPresupuesto(Double presupuesto){
         List<Vehiculo> listaVehiculos = leerVehiculos("vehiculos.json");
         for(Vehiculo vehiculo : listaVehiculos){

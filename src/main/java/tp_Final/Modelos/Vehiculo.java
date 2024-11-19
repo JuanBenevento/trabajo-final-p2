@@ -74,8 +74,8 @@ public class Vehiculo {
                 "id=" + id +
                 ", modelo='" + modelo + '\'' +
                 ", marca='" + marca + '\'' +
-                ", precio=" + precio +
-                ", stock=" + stock +
+                ", precio=" + precio + '\'' +
+                ", stock=" + stock + '\'' +
                 '}';
     }
 

@@ -80,12 +80,12 @@ public class Venta {
     @Override
     public String toString() {
         return "Venta{" +
-                "idVenta=" + id +
-                ", comprador=" + comprador +
-                ", vendedor=" + vendedor +
-                ", fechaVenta=" + fecha +
-                ", vehiculo=" + vehiculo +
-                ", monto=" + monto +
+                "idVenta=" + id + '\'' +
+                ", comprador=" + comprador + '\'' +
+                ", vendedor=" + vendedor + '\'' +
+                ", fechaVenta=" + fecha + '\'' +
+                ", vehiculo=" + vehiculo + '\'' +
+                ", monto=" + monto + '\'' +
                 '}';
     }
 

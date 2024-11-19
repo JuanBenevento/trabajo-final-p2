@@ -51,8 +51,8 @@ public class Vendedor extends Persona {
         return "Vendedor{" +
                 super.toString() +
                 "tipoPersona='" + tipoPersona + '\'' +
-                ", salarioBase=" + salarioBase +
-                ", comision=" + comision +
+                ", salarioBase=" + salarioBase + '\'' +
+                ", comision=" + comision + '\'' +
                 '}';
     }
 
