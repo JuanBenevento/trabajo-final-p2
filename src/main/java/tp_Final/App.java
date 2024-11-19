@@ -9,7 +9,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class App{
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         Menu menu = new Menu();
         menu.mostrarMenu();
     }

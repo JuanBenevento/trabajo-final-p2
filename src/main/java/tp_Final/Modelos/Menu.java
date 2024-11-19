@@ -24,7 +24,7 @@ public class Menu {
         this.ventas = gestor.leerVentas("ventas.json");
     }
 
-    public void mostrarMenu() throws IOException, ParseException {
+    public void mostrarMenu() throws IOException, ParseException, InterruptedException {
         int opcion;
 
         do {
@@ -49,7 +49,9 @@ public class Menu {
 
 
 
-    public void menuCompradores() {
+    public void menuCompradores() throws InterruptedException {
+        System.out.println("\033[H\033[2J");
+        System.out.flush();
         int opcion = 0;
         do {
             System.out.println("\n--- Menú Compradores ---");
@@ -133,7 +135,9 @@ public class Menu {
         gestor.guardarComprador(compradores);
 
     }
-    public void menuVehiculos() throws IOException {
+    public void menuVehiculos() throws IOException, InterruptedException {
+        System.out.println("\033[H\033[2J");
+        System.out.flush();
         int opcion = 0;
         do {
             System.out.println("\n--- Menú Vehículos ---");
@@ -172,27 +176,59 @@ public class Menu {
 
     public void editarVehiculoPorId() throws IOException {
         int posicion = buscarVehiculoPorId();
-        int opcion = 0;
-        System.out.println("Seleccion la opcion a editar: ");
-        System.out.println("1. Modelo");
-        System.out.println("2. Marca");
-        System.out.println("3. Precio");
-        System.out.println("4. Stock");
-        System.out.println("5. Volver");
-        opcion = scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
-
-        switch (opcion){
-            case 1: vehiculos.get(posicion).setModelo(scanner.nextLine());
-            case 2:vehiculos.get(posicion).setMarca(scanner.nextLine());
-            case 3:vehiculos.get(posicion).setPrecio(scanner.nextDouble());
-            case 4:vehiculos.get(posicion).setStock(scanner.nextInt());
-            case 5:    break;
+        if (posicion == -1) { // Validar si el vehículo existe
+            System.out.println("Vehículo no encontrado.");
+            return; // Salir si no se encuentra el vehículo
         }
 
-        gestor.guardarVehiculo(vehiculos);
+        int opcion;
+        do {
+            System.out.println("\n--- Editar Vehículo ---");
+            System.out.println("1. Editar Modelo");
+            System.out.println("2. Editar Marca");
+            System.out.println("3. Editar Precio");
+            System.out.println("4. Editar Stock");
+            System.out.println("5. Volver");
+            System.out.print("Seleccione una opción: ");
 
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
+
+            switch (opcion) {
+                case 1 -> {
+                    System.out.print("Ingrese el nuevo modelo: ");
+                    String nuevoModelo = scanner.nextLine();
+                    vehiculos.get(posicion).setModelo(nuevoModelo);
+                    System.out.println("Modelo actualizado correctamente.");
+                }
+                case 2 -> {
+                    System.out.print("Ingrese la nueva marca: ");
+                    String nuevaMarca = scanner.nextLine();
+                    vehiculos.get(posicion).setMarca(nuevaMarca);
+                    System.out.println("Marca actualizada correctamente.");
+                }
+                case 3 -> {
+                    System.out.print("Ingrese el nuevo precio: ");
+                    double nuevoPrecio = scanner.nextDouble();
+                    vehiculos.get(posicion).setPrecio(nuevoPrecio);
+                    System.out.println("Precio actualizado correctamente.");
+                }
+                case 4 -> {
+                    System.out.print("Ingrese el nuevo stock: ");
+                    int nuevoStock = scanner.nextInt();
+                    vehiculos.get(posicion).setStock(nuevoStock);
+                    System.out.println("Stock actualizado correctamente.");
+                }
+                case 5 -> System.out.println("Volviendo al menú anterior...");
+                default -> System.out.println("Opción no válida. Por favor, intente nuevamente.");
+            }
+        } while (opcion != 5);
+
+        // Guardar los cambios realizados
+        gestor.guardarVehiculo(vehiculos);
+        System.out.println("Cambios guardados exitosamente.");
     }
+
 
     public int buscarVehiculoPorId(){
         int contador = 0;
@@ -209,7 +245,9 @@ public class Menu {
         return 0;
     }
 
-    public void menuVentas() throws IOException, ParseException {
+    public void menuVentas() throws IOException, ParseException, InterruptedException {
+        System.out.println("\033[H\033[2J");
+        System.out.flush();
         int opcion = 0;
 
         do {
@@ -270,43 +308,74 @@ public class Menu {
         return 0;
     }
 
-    public void editarVentaPorId() throws ParseException {
+    public void editarVentaPorId() throws ParseException, IOException {
         int posicion = buscarVentaPorId();
-        int opcion = 0;
-        System.out.println("Elija una opcion para editar");
-        System.out.println("1. Comprador");
-        System.out.println("2. Vendedor");
-        System.out.println("3. Fecha");
-        System.out.println("4. Vehiculo");
-        System.out.println("5. Monto");
-        System.out.println("6. Volver");
-        opcion = scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
-
-        switch (opcion){
-            case 1:
-                System.out.println("Ingrese el dni del nuevo comprador: ");
-                ventas.get(buscarVentaPorId()).setComprador(gestor.obtenerCompradorPorDni(scanner.nextLine()));
-            case 2:
-                System.out.println("Ingrese el dni del nuevo vendedor: ");
-                ventas.get(buscarVentaPorId()).setVendedor(gestor.obtenerVendedorPorDni(scanner.nextLine()));
-            case 3:
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String inputFecha  = scanner.nextLine();
-                Date nuevaFecha = sdf.parse(inputFecha);
-                ventas.get(buscarVentaPorId()).setFechaVenta(nuevaFecha);
-            case 4:
-                System.out.println("Ingrese el id del nuevo vehiculo");
-                ventas.get(buscarVentaPorId()).setVehiculo(gestor.obtenerVehiculoPorId(String.valueOf(scanner.nextInt())));
-            case 5:
-                System.out.println("Ingrese el nuevo monto: ");
-                ventas.get(buscarVentaPorId()).setMonto(scanner.nextDouble());
-            case 6: break;
+        if (posicion == -1) {
+            System.out.println("Venta no encontrada.");
+            return; // Salir si no se encuentra la venta
         }
 
-        gestor.guardarVenta(ventas);
+        int opcion;
+        do {
+            System.out.println("\n--- Editar Venta ---");
+            System.out.println("1. Editar Comprador");
+            System.out.println("2. Editar Vendedor");
+            System.out.println("3. Editar Fecha");
+            System.out.println("4. Editar Vehículo");
+            System.out.println("5. Editar Monto");
+            System.out.println("6. Volver");
+            System.out.print("Seleccione una opción: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
 
+            switch (opcion) {
+                case 1 -> {
+                    System.out.print("Ingrese el DNI del nuevo comprador: ");
+                    String dniComprador = scanner.nextLine();
+                    ventas.get(posicion).setComprador(gestor.obtenerCompradorPorDni(dniComprador));
+                    System.out.println("Comprador actualizado correctamente.");
+                }
+                case 2 -> {
+                    System.out.print("Ingrese el DNI del nuevo vendedor: ");
+                    String dniVendedor = scanner.nextLine();
+                    ventas.get(posicion).setVendedor(gestor.obtenerVendedorPorDni(dniVendedor));
+                    System.out.println("Vendedor actualizado correctamente.");
+                }
+                case 3 -> {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    sdf.setLenient(false);
+                    System.out.print("Ingrese la nueva fecha (formato yyyy-MM-dd): ");
+                    String inputFecha = scanner.nextLine();
+                    try {
+                        Date nuevaFecha = sdf.parse(inputFecha);
+                        ventas.get(posicion).setFechaVenta(nuevaFecha);
+                        System.out.println("Fecha actualizada correctamente.");
+                    } catch (ParseException e) {
+                        System.out.println("Formato de fecha inválido. Intente nuevamente.");
+                    }
+                }
+                case 4 -> {
+                    System.out.print("Ingrese el ID del nuevo vehículo: ");
+                    String idVehiculo = scanner.nextLine();
+                    ventas.get(posicion).setVehiculo(gestor.obtenerVehiculoPorId(idVehiculo));
+                    System.out.println("Vehículo actualizado correctamente.");
+                }
+                case 5 -> {
+                    System.out.print("Ingrese el nuevo monto: ");
+                    double nuevoMonto = scanner.nextDouble();
+                    ventas.get(posicion).setMonto(nuevoMonto);
+                    System.out.println("Monto actualizado correctamente.");
+                }
+                case 6 -> System.out.println("Volviendo al menú anterior...");
+                default -> System.out.println("Opción no válida. Por favor, intente nuevamente.");
+            }
+        } while (opcion != 6);
+
+        // Guardar los cambios realizados en las ventas
+        gestor.guardarVenta(ventas);
+        System.out.println("Cambios guardados exitosamente.");
     }
+
     public int buscarVendedorPorDni(){
         int contador =0;
         System.out.println("Ingrese el DNI del vendedor a editar: ");
@@ -315,70 +384,105 @@ public class Menu {
             System.out.println("El dni debe tener 8 números válidos");
         }else if(!dni.matches("1234567890")){
             System.out.println("El dni debe tener 8 números válidos");
-        }
-
-        for (Vendedor vendedor : vendedores){
-            contador ++;
-            if(vendedor.getDni() == dni){
-                return contador -1;
+        }else{
+            for (Vendedor vendedor : vendedores){
+                contador ++;
+                if(vendedor.getDni() == dni){
+                    return contador -1;
+                }
             }
-        }
 
-        return contador-1;
+        }
+        return 0;
     }
 
-    public void editarVendedorPorDni(){
+    public void editarVendedorPorDni() throws IOException {
         int posicion = buscarVendedorPorDni();
-        int opcion = 0;
-        System.out.println("1. Nombre");
-        System.out.println("2. Apellido");
-        System.out.println("3. Email");
-        System.out.println("4. Salario base");
-        System.out.println("5. Comision");
-        System.out.println("6. Volver");
-        opcion =scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
 
-        switch (opcion){
-            case 1:
-                vendedores.get(posicion).setNombre(scanner.nextLine());
-                break;
-            case 2:
-                vendedores.get(posicion).setApellido(scanner.nextLine());
-                break;
-            case 3:
-                vendedores.get(posicion).setEmail(scanner.nextLine());
-                break;
-            case 4:
-                vendedores.get(posicion).setSalarioBase(scanner.nextDouble());
-                break;
-            case 5: vendedores.get(posicion).setComision(scanner.nextDouble());
-                break;
-            case 6: break;
+        if (posicion == -1) { // Validar si el vendedor existe
+            System.out.println("Vendedor no encontrado.");
+            return;
         }
-        gestor.guardarVendedor(vendedores);
 
+        int opcion;
+        do {
+            System.out.println("\n--- Editar Vendedor ---");
+            System.out.println("1. Editar Nombre");
+            System.out.println("2. Editar Apellido");
+            System.out.println("3. Editar Email");
+            System.out.println("4. Editar Salario base");
+            System.out.println("5. Editar Comisión");
+            System.out.println("6. Volver");
+            System.out.print("Seleccione una opción: ");
+
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
+
+            switch (opcion) {
+                case 1 -> {
+                    System.out.print("Ingrese el nuevo nombre: ");
+                    String nuevoNombre = scanner.nextLine();
+                    vendedores.get(posicion).setNombre(nuevoNombre);
+                    System.out.println("Nombre actualizado correctamente.");
+                }
+                case 2 -> {
+                    System.out.print("Ingrese el nuevo apellido: ");
+                    String nuevoApellido = scanner.nextLine();
+                    vendedores.get(posicion).setApellido(nuevoApellido);
+                    System.out.println("Apellido actualizado correctamente.");
+                }
+                case 3 -> {
+                    System.out.print("Ingrese el nuevo email: ");
+                    String nuevoEmail = scanner.nextLine();
+                    vendedores.get(posicion).setEmail(nuevoEmail);
+                    System.out.println("Email actualizado correctamente.");
+                }
+                case 4 -> {
+                    System.out.print("Ingrese el nuevo salario base: ");
+                    double nuevoSalario = scanner.nextDouble();
+                    vendedores.get(posicion).setSalarioBase(nuevoSalario);
+                    System.out.println("Salario base actualizado correctamente.");
+                }
+                case 5 -> {
+                    System.out.print("Ingrese la nueva comisión: ");
+                    double nuevaComision = scanner.nextDouble();
+                    vendedores.get(posicion).setComision(nuevaComision);
+                    System.out.println("Comisión actualizada correctamente.");
+                }
+                case 6 -> System.out.println("Volviendo al menú anterior...");
+                default -> System.out.println("Opción no válida. Por favor, intente nuevamente.");
+            }
+        } while (opcion != 6);
+
+        // Guardar los cambios realizados
+        gestor.guardarVendedor(vendedores);
+        System.out.println("Cambios guardados exitosamente.");
     }
 
-    private void listarVehiculos() {
+
+    private void listarVehiculos() throws InterruptedException {
         System.out.println("--- Listar Vehiculos");
         for(Vehiculo vehiculo : vehiculos){
             System.out.println(vehiculo.toString());
         }
+        Thread.sleep(5000);
     }
 
-    private void listarVendedores() {
+    private void listarVendedores() throws InterruptedException {
         System.out.println("--- Listar Vendedores");
         for (Vendedor vendedor : vendedores){
             System.out.println(vendedor.toString());
         }
+        Thread.sleep(5000);
     }
 
-    private void listarCompradores() {
+    private void listarCompradores() throws InterruptedException {
         System.out.println("--- Listar Compradores");
         for (Comprador comprador : compradores){
             System.out.println(comprador.toString());
         }
+        Thread.sleep(5000);
+
     }
 
 
@@ -526,10 +630,11 @@ public class Menu {
         System.out.println("Venta registrada correctamente.");
     }
 
-    private void listaSegunPresupuesto(){
+    private void listaSegunPresupuesto() throws InterruptedException {
         System.out.println("Ingrese el presupuesto: ");
         Double presupuesto = scanner.nextDouble();
         gestor.mostrarAutosSegunPresupuesto(presupuesto);
+        Thread.sleep(5000);
     }
 
 }
