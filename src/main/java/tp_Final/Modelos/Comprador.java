@@ -1,5 +1,7 @@
 package tp_Final.Modelos;
 
+import java.util.Objects;
+
 public class Comprador extends Persona {
     private String tipoPersona;
     private Double montoDisponible;
@@ -38,5 +40,6 @@ public class Comprador extends Persona {
                 ", montoDisponible=" + montoDisponible +
                 '}';
     }
+
 
 }

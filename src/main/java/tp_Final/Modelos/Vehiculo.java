@@ -1,5 +1,7 @@
 package tp_Final.Modelos;
 
+import java.util.Objects;
+
 public class Vehiculo {
     private Integer id;
     private String modelo;
@@ -75,5 +77,17 @@ public class Vehiculo {
                 ", precio=" + precio +
                 ", stock=" + stock +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vehiculo vehiculo)) return false;
+        return Objects.equals(id, vehiculo.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, modelo, marca, precio, stock);
     }
 }

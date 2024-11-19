@@ -125,27 +125,33 @@ public class Gestor implements iGestionable {
 
     public Comprador obtenerCompradorPorDni(String dni) {
         List<Comprador> compradores = leerCompradores("compradores.json");  // Método que obtiene la lista de compradores
-        return compradores.stream()
-                .filter(c -> c.getDni().equals(dni))
-                .findFirst()
-                .orElse(null);  // Devuelve null si no encuentra un comprador con ese DNI
+        for(Comprador comprador : compradores){
+            if(comprador.getDni().equals(dni)){
+                return comprador;
+            }
+        }
+        return null;
     }
 
 
     public Vendedor obtenerVendedorPorDni(String dni){
         List<Vendedor> vendedores = leerVendedores("vendedores.json");  // Método que obtiene la lista de compradores
-        return vendedores.stream()
-                .filter(c -> c.getDni().equals(dni))
-                .findFirst()
-                .orElse(null);
+        for(Vendedor vendedor : vendedores){
+            if(vendedor.getDni().equals(dni)){
+                return vendedor;
+            }
+        }
+        return null;
     }
 
    public Vehiculo obtenerVehiculoPorId(String id){
        List<Vehiculo> vehiculos = leerVehiculos("vehiculos.json");  // Método que obtiene la lista de compradores
-       return vehiculos.stream()
-               .filter(c -> c.getId().equals(id))
-               .findFirst()
-               .orElse(null);
+       for(Vehiculo vehiculo : vehiculos){
+           if(vehiculo.getId().equals(id)){
+               return vehiculo;
+           }
+       }
+       return null;
    }
 
    public void mostrarAutosSegunPresupuesto(Double presupuesto){

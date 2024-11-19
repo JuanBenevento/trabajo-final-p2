@@ -589,12 +589,9 @@ public class Menu {
             System.out.println("Comprador no encontrado. Ingrese los datos del comprador:");
             agregarComprador();// Obtener el último comprador agregado
         }
-        comprador.setDni(dniComprador);
-        // Solicitar los datos del vendedor
         System.out.println("Datos del Vendedor:");
         System.out.print("Ingrese el DNI del Vendedor: ");
-        String dniVendedor = scanner.nextLine();
-        vendedor = gestor.obtenerVendedorPorDni(dniVendedor);  // Método para buscar comprador por DNI
+        vendedor = gestor.obtenerVendedorPorDni(scanner.nextLine());  // Método para buscar comprador por DNI
         if(vendedor == null){
             System.out.println("Vendedor no encontrado. Ingrese los datos del vendedor:");
             agregarVendedor();
